@@ -5,8 +5,8 @@ import re
 
 class ArticlelistSpider(scrapy.Spider):
     name = "articlelist"
-    allowed_domains = ["http://content.cdn.bb.bbwc.cn/slateInterface/v9/app_1/iphone6/tag/cat_18/articlelist"]
-    start_urls = ['http://http://content.cdn.bb.bbwc.cn/slateInterface/v9/app_1/iphone6/tag/cat_18/articlelist/']
+    #allowed_domains = ["http://content.cdn.bb.bbwc.cn/slateInterface/v9/app_1/iphone6/tag/cat_18/articlelist"]
+    start_urls = ['http://content.cdn.bb.bbwc.cn/slateInterface/v9/app_1/iphone6/tag/cat_18/articlelist/']
 
     def parse(self, response):
         r_text = r'http://content.cdn.bb.bbwc.cn/.+?\.html'
