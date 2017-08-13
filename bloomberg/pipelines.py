@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pymongo
 
 # Define your item pipelines here
 #
