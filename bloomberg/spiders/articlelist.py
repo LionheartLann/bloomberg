@@ -14,7 +14,7 @@ class ArticlelistSpider(scrapy.Spider):
         regex = re.compile(r_text)
         result = regex.findall(response.text)
         try:
-            for url in result[:10]:
+            for url in result:
                 self.logger.info("Parsing:%s", url)
                 yield scrapy.Request(url=url, callback=self.parse_article)
         except Exception as e:
