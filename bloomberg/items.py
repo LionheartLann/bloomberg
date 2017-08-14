@@ -14,6 +14,6 @@ class BloombergItem(scrapy.Item):
     article_id = scrapy.Field()
     title = scrapy.Field()
     date = scrapy.Field()
-    tag = scrapy.Field()
+    link = scrapy.Field()
     content = scrapy.Field()
     pass

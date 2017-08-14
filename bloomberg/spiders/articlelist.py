@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
+from bloomberg.items import BloombergItem
 
 
 class ArticlelistSpider(scrapy.Spider):
@@ -13,7 +14,7 @@ class ArticlelistSpider(scrapy.Spider):
         regex = re.compile(r_text)
         result = regex.findall(response.text)
         try:
-            for url in result:
+            for url in result[:3]:
                 print("=====================Parse======================", url)
                 yield scrapy.Request(url=url, callback=self.parse_article)
         except Exception as e:
@@ -25,7 +26,18 @@ class ArticlelistSpider(scrapy.Spider):
             wrapper = response.xpath('//div[@class="wrapper"]')
             title = wrapper.xpath('//title/text()').extract() 
             time = wrapper.xpath('//p[@class="time"]/text()').extract()
-            print("=====================ParseArticle======================", title)
+            r_text = r'articles/\d+'
+            id_regex = re.compile(r_text)
+            article_id = id_regex.search(response.url).group(0)
+            aid = article_id.replace('articles/','')
+            item = BloombergItem()
+            item['article_id'] = aid
+            item['title'] = title
+            item['date'] = time
+            item['link'] = response.url
+            item['content'] = wrapper.extract()
+            #return item
+            yield item
         except Exception as e:
             print(e)
 
