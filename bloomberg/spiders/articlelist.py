@@ -6,7 +6,7 @@ from bloomberg.items import BloombergItem
 
 class ArticlelistSpider(scrapy.Spider):
     name = "articlelist"
-    #allowed_domains = ["http://content.cdn.bb.bbwc.cn/slateInterface/v9/app_1/iphone6/tag/cat_18/articlelist"]
+    #allowed_domains = ["http://content.cdn.bb.bbwc.cn"]
     start_urls = ['http://content.cdn.bb.bbwc.cn/slateInterface/v9/app_1/iphone6/tag/cat_18/articlelist/']
 
     def parse(self, response):
@@ -14,11 +14,11 @@ class ArticlelistSpider(scrapy.Spider):
         regex = re.compile(r_text)
         result = regex.findall(response.text)
         try:
-            for url in result[:3]:
-                print("=====================Parse======================", url)
+            for url in result[:10]:
+                self.logger.info("Parsing:%s", url)
                 yield scrapy.Request(url=url, callback=self.parse_article)
         except Exception as e:
-            print(e)
+            self.logger.info("ERROR:%s",e)
 
     def parse_article(self, response):
         #if response.status == 200:
@@ -30,14 +30,20 @@ class ArticlelistSpider(scrapy.Spider):
             id_regex = re.compile(r_text)
             article_id = id_regex.search(response.url).group(0)
             aid = article_id.replace('articles/','')
+
             item = BloombergItem()
             item['article_id'] = aid
             item['title'] = title
             item['date'] = time
             item['link'] = response.url
             item['content'] = wrapper.extract()
+
+            self.logger.info("Aid:%s", aid)
+            self.logger.info("Item:%s",item['title'])
             #return item
             yield item
         except Exception as e:
-            print(e)
-
+            self.logger.info("ERROR:%s",e)
+    
+    def get_article_id(self, response):
+        pass

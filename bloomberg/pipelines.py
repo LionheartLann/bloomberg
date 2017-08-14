@@ -34,5 +34,9 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        self.db[self.collection_name].insert_one(dict(item))
+        aid = self.db[self.collection_name].find({"article_id":item["article_id"]}).count()
+        if aid== 0:
+            self.db[self.collection_name].insert_one(dict(item))
+        else:
+            print('=======================Duplicated aid====================', item["article_id"])
         return item
